@@ -1,0 +1,31 @@
+<?xml version="1.0"?>
+<catalog>
+    <book>
+        <title>Tooth loss may affect ability to carry out everyday tasks</title>
+        <description>Older adults with more natural teeth are better able to perform everyday tasks</description>
+    </book>
+    <book>
+        <title>A gentler strategy for avoiding childhood dental decay</title>
+        <description>The combination of a carb-heavy diet and poor oral hygiene can leave children with early childhood
+            caries
+        </description>
+    </book>
+    <book>
+        <title>AI helps predict treatment outcomes for patients with diseased dental implants</title>
+        <description>Peri-implantitis, a condition where tissue and bone around dental implants becomes infected, besets
+            roughly one-quarter of dental implant patients
+        </description>
+    </book>
+    <book>
+        <title>Ventilation assessment by carbon dioxide levels in dental treatment rooms</title>
+        <description>Carbon dioxide (CO2) is a byproduct of human metabolism and exists in high levels in exhaled air,
+            and is therefore often used as a proxy for indoor air quality
+        </description>
+    </book>
+    <book>
+        <title>The Sundered Grail</title>
+        <description>Researchers at the University Zurich have mapped the first complete atlas of single cells that make
+            up the human teeth
+        </description>
+    </book>
+</catalog>
