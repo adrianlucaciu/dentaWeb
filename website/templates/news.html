@@ -47,111 +47,53 @@
             </div>
 
 
-            <div id="stuff">
-                <table id='newsXml' cellpadding="10px" style="text-align:left">
-                <thead>
+            <!--Include jQuery-->
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+
+
+            <table class="table table-condensed table-hovered table-bordered">
+                <thead class="thead-light">
                 <tr>
-                    <th>title</th>
-                    <th>body</th>
+
+                    <th>Title</th>
+
+                    <th>Description</th>
                 </tr>
                 </thead>
-                <tbody>
+                <tbody id="tableBody">
 
                 </tbody>
-                </table>
 
-            </div>
+            </table>
+            </body>
+
             <script>
-                let xmlContent = '';
-                let tableNews = document.getElementById('newsXml')
-                fetch('news.xml').then((response) => {
-                    response.text().then((xml) => {
-                        xmlContent = xml;
-                        let parser = new DOMParser();
-                        let xmlDOM = parser.parseFromString(xmlContent, 'application/xml');
-                        let news =xmlDOM = xmlDOM.querySelectorAll('newsItem');
+                // Clear the table body.
+                //ajax call to load XML and parse it
+                $.ajax({
+                    type: 'GET',
+                    url: 'static/website/xml/books.xml',           // The file path.
+                    dataType: 'xml',
+                    success: function (xml) {
+                        //find all book tags, loop them and append to table body
+                        $(xml).find('book').each(function () {
 
-                        news.forEach(bookXmlNode => {
-                            let row =document.createElement('tr');
+                            // Append new data to the tbody element.
+                            $('#tableBody').append(
+                                '<tr>' +
+                                '<td>' +
+                                $(this).find('title').text() + '</td> ' +
 
-                            // author
-                            let td = document.createElement('td');
-                            td.innerText = bookXmlNode.children[0].innerHTML;
-                            row.appendChild(td);
+                                '<td>' +
+                                $(this).find('description').text() + '</td> ' +
+                                '</tr>');
+                        });
+                    }
+                });
 
-                            // body
-                            td = document.createElement('td');
-                            td.innerText = bookXmlNode.children[1].innerHTML;
-                            row.appendChild(td);
-
-                            tableNews.children[1].appendChild(row)
-                        })
-                    });
-                })
             </script>
 
 
-            <div class="row">
-                <!-- Single Blog Item -->
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="single-blog-item mb-100">
-                        <a href="./blog-details.html">
-                            <img src="{% static 'website/img/bg-img/4.jpg' %}" alt="">
-                        </a>
-                        <!-- Blog Content -->
-                        <div class="blog-content">
-                            <a href="./blog-details.html" class="post-title">Your guide for dental implant types and
-                                procedure</a>
-                            <p>Donec tempor, lorem et euismod eleifend, est lectus laoreet ante, sed accusan justo diam
-                                ...</p>
-                            <div class="post-meta">
-                                <a href="#"><i class="icon_clock_alt"></i> 1 Apr 2021</a>
-                                <a href="#"><i class="icon_chat_alt"></i> 3 Comments</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Single Blog Item -->
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="single-blog-item mb-100">
-                        <a href="./blog-details.html">
-                            <img src="{% static 'website/img/bg-img/5.jpg' %}" alt="">
-                        </a>
-                        <!-- Blog Content -->
-                        <div class="blog-content">
-                            <a href="./blog-details.html" class="post-title">6 Tips for recovery post wisdom tooth
-                                extraction</a>
-                            <p>Donec tempor, lorem et euismod eleifend, est lectus laoreet ante, sed accusan justo diam
-                                ...</p>
-                            <div class="post-meta">
-                                <a href="#"><i class="icon_clock_alt"></i> 12 Apr 2021</a>
-                                <a href="#"><i class="icon_chat_alt"></i> 1 Comments</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Single Blog Item -->
-                <div class="col-12 col-md-6 col-lg-4">
-                    <div class="single-blog-item mb-100">
-                        <a href="./blog-details.html">
-                            <img src="{% static 'website/img/bg-img/6.jpg' %}" alt="">
-                        </a>
-                        <!-- Blog Content -->
-                        <div class="blog-content">
-                            <a href="./blog-details.html" class="post-title">Are dental implants safe for you if you
-                                have diabetes?</a>
-                            <p>Donec tempor, lorem et euismod eleifend, est lectus laoreet ante, sed accusan justo diam
-                                ...</p>
-                            <div class="post-meta">
-                                <a href="#"><i class="icon_clock_alt"></i> 28 Apr 2021</a>
-                                <a href="#"><i class="icon_chat_alt"></i> 2 Comments</a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
         </div>
     </section>
     <!-- ***** Blog Area End ***** -->
@@ -159,6 +101,5 @@
     <!-- ***** Blog Area End ***** -->
 
 
-    <script src="{% static 'website/js/xmlFetch.js' %}"></script>
 
 {% endblock %}
