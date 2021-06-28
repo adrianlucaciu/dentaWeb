@@ -104,6 +104,9 @@ ul {
     margin: 0;
     padding: 0; }
 
+.input-group{
+  margin:0px auto;
+ }
 
 .bg-overlay {
   position: relative;
