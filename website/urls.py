@@ -13,4 +13,7 @@ urlpatterns = [
 
     path("register/", register, name="register"),
     path('', include("django.contrib.auth.urls")),
+
+    # DB test
+    path("<str:name>", views.index, name="index"),
 ]
