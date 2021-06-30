@@ -86,6 +86,8 @@ def change_password(request):
     return render(request, 'change_password.html', context)
 
 
+
+
 def home(request):
     return render(request, 'home.html', {})
 

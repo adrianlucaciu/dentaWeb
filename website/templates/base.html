@@ -95,7 +95,7 @@
                                 <li><a href="{% url 'about' %}">About</a></li>
                                 <li><a href="{% url 'service' %}">Service</a></li>
                                 <li><a href="{% url 'pricing' %}">Pricing</a></li>
-                                <li><a href="./contact.html">Contact</a></li>
+                                <li><a href="{% url 'contact' %}">Contact</a></li>
 
                                 {% if user.is_authenticated %}
                                     <li><a href="{% url 'edit_profile' %}">Edit Profile</a></li>
