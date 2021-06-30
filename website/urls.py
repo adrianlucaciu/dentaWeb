@@ -1,5 +1,6 @@
-from django.urls import path, include
+from django.urls import path
 from . import views
+
 
 urlpatterns = [
     path('', views.home, name="home"),
@@ -10,10 +11,11 @@ urlpatterns = [
     path('service.html', views.service, name="service"),
     path('appointment.html', views.appointment, name="appointment"),
 
-
-    path("register", views.register_request, name="register"),
-    path("login", views.login_request, name="login"),
-    path("logout", views.logout_request, name="logout"),
+    path('login/', views.login_user, name='login'),
+    path('logout/', views.logout_user, name='logout'),
+    path('register/', views.register_user, name='register'),
+    path('edit_profile/', views.edit_profile, name='edit_profile'),
+    path('change_password', views.change_password, name='change_password'),
     # DB test
 
 ]

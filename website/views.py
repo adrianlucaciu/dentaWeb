@@ -1,53 +1,89 @@
+import self as self
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.http import HttpResponse
-from .forms import NewUserForm
-from django.contrib.auth import login, authenticate, logout
+from django.views import generic
+from django.contrib.auth import login, authenticate, logout, update_session_auth_hash
 from django.contrib import messages
-from django.contrib.auth.forms import AuthenticationForm
-
+from django.contrib.auth.forms import AuthenticationForm, UserChangeForm
+from django.urls import reverse_lazy
+from django.shortcuts import render, redirect
+from django.contrib.auth import authenticate, login, logout, update_session_auth_hash
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
+from django.contrib import messages
+from .forms import SignUpForm, EditProfileForm
 
 # Create your views here.
 
 
-# Register
-def register_request(request):
-    if request.method == "POST":
-        form = NewUserForm(request.POST)
-        if form.is_valid():
-            user = form.save()
+def login_user(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
             login(request, user)
-            messages.success(request, "Registration successful.")
-            return redirect("home")
-        messages.error(request, "Unsuccessful registration. Invalid information.")
-    form = NewUserForm
-    return render(request=request, template_name="register.html", context={"register_form": form})
+            messages.success(request, ('You Have Been Logged In!'))
+            return redirect('home')
 
-
-# Login
-def login_request(request):
-    if request.method == "POST":
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = authenticate(username=username, password=password)
-            if user is not None:
-                login(request, user)
-                messages.info(request, f"You are now logged in as {username}.")
-                return redirect("home")
-            else:
-                messages.error(request, "Invalid username or password.")
         else:
-            messages.error(request, "Invalid username or password.")
-    form = AuthenticationForm()
-    return render(request=request, template_name="login.html", context={"login_form": form})
+            messages.success(request, ('Error Logging In - Please Try Again...'))
+            return redirect('login')
+    else:
+        return render(request, 'login.html', {})
 
 
-def logout_request(request):
+def logout_user(request):
     logout(request)
-    messages.info(request, "You have successfully logged out.")
-    return redirect("home")
+    messages.success(request, ('You Have Been Logged Out...'))
+    return redirect('home')
+
+
+def register_user(request):
+    if request.method == 'POST':
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password1']
+            user = authenticate(username=username, password=password)
+            login(request, user)
+            messages.success(request, ('You Have Registered...'))
+            return redirect('home')
+    else:
+        form = SignUpForm()
+
+    context = {'form': form}
+    return render(request, 'register.html', context)
+
+
+def edit_profile(request):
+    if request.method == 'POST':
+        form = EditProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, ('You Have Edited Your Profile...'))
+            return redirect('home')
+    else:
+        form = EditProfileForm(instance=request.user)
+
+    context = {'form': form}
+    return render(request, 'edit_profile.html', context)
+
+
+def change_password(request):
+    if request.method == 'POST':
+        form = PasswordChangeForm(data=request.POST, user=request.user)
+        if form.is_valid():
+            form.save()
+            update_session_auth_hash(request, form.user)
+            messages.success(request, ('You Have Edited Your Password...'))
+            return redirect('home')
+    else:
+        form = PasswordChangeForm(user=request.user)
+
+    context = {'form': form}
+    return render(request, 'change_password.html', context)
 
 
 def home(request):

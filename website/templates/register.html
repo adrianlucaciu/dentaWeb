@@ -1,18 +1,37 @@
-{% extends "base.html" %}
-{% load crispy_forms_filters %}
+{% extends 'base.html' %}
+
 {% block content %}
 
-    {% load crispy_forms_tags %}
+    <h2 class="text-center">Register</h2>
 
-    <!--Register-->
-    <div class="container py-5">
-        <h1>Register</h1>
-        <form method="POST" class="form-group">
+    <div class="col-md-6 offset-md-3">
+        <form method="POST" action="{% url 'register' %}">
             {% csrf_token %}
-            {{ register_form|crispy }}
-            <button class="btn btn-primary" type="submit">Register</button>
-        </form>
-        <p class="text-center">If you already have an account, <a href="{% url 'login' %}">login</a> instead.</p>
-    </div>
 
+            {% if form.errors %}
+                <div class="alert alert-warning alert-dismissable" role="alert">
+                    <button class="close" data-dismiss="alert">
+                        <small><sup>x</sup></small>
+                    </button>
+                    <p>Your Form Has Errors...</p>
+                    {% for field in form %}
+                        {% if field.errors %}
+                            {{ field.errors }}
+                        {% endif %}
+
+                    {% endfor %}
+
+                </div>
+
+
+            {% endif %}
+
+
+            {{ form.as_p }}
+
+            <input type="submit" value="Register" class="btn btn-secondary">
+        </form>
+    </div>
+    <br/><br/>
 {% endblock %}
+

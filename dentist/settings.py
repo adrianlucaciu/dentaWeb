@@ -133,5 +133,3 @@ EMAIL_USE_TLS = True
 django_heroku.settings(locals())
 
 CRISPY_TEMPLATE_PACK = "bootstrap4"
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
