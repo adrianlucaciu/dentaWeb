@@ -1,30 +1,53 @@
 from django.shortcuts import render, redirect
 from django.core.mail import send_mail
 from django.http import HttpResponse
-from .forms import RegisterForm
-from .models import ToDoList, Item
+from .forms import NewUserForm
+from django.contrib.auth import login, authenticate, logout
+from django.contrib import messages
+from django.contrib.auth.forms import AuthenticationForm
 
 
 # Create your views here.
 
-# DB test
-def index(response, name):
-    ls = ToDoList.objects.get(name=name)
-    item = ls.item_set.get(id=1)
-    return HttpResponse("<h1>%s</h1><br></br><p>%s</p>" %(ls.name, str(item.text)))
 
-
-def register(response):
-    if response.method == "POST":
-        form = RegisterForm(response.POST)
+# Register
+def register_request(request):
+    if request.method == "POST":
+        form = NewUserForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
+            login(request, user)
+            messages.success(request, "Registration successful.")
+            return redirect("home")
+        messages.error(request, "Unsuccessful registration. Invalid information.")
+    form = NewUserForm
+    return render(request=request, template_name="register.html", context={"register_form": form})
 
-        return redirect("home")
-    else:
-        form = RegisterForm()
 
-    return render(response, "register.html", {"form": form})
+# Login
+def login_request(request):
+    if request.method == "POST":
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=password)
+            if user is not None:
+                login(request, user)
+                messages.info(request, f"You are now logged in as {username}.")
+                return redirect("home")
+            else:
+                messages.error(request, "Invalid username or password.")
+        else:
+            messages.error(request, "Invalid username or password.")
+    form = AuthenticationForm()
+    return render(request=request, template_name="login.html", context={"login_form": form})
+
+
+def logout_request(request):
+    logout(request)
+    messages.info(request, "You have successfully logged out.")
+    return redirect("home")
 
 
 def home(request):
